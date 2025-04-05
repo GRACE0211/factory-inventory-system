@@ -1,0 +1,91 @@
+// 查詢原庫存
+SELECT product_id,sum(quantity) 
+FROM `product_suppliers` 
+group by product_id;
+
+
+SELECT 
+    p.product_id,
+    
+    -- 原始庫存 (product_suppliers 裡的總量)
+    SUM(p.quantity) AS base_quantity,
+    
+    -- 進貨總和
+    COALESCE((
+      SELECT SUM(quantity) 
+      FROM transactions t1 
+      WHERE t1.transaction_type = 'IN' 
+        AND t1.product_id = p.product_id
+    ), 0) AS total_in,
+
+    -- 出貨總和
+    COALESCE((
+      SELECT SUM(quantity) 
+      FROM transactions t2 
+      WHERE t2.transaction_type = 'OUT' 
+        AND t2.product_id = p.product_id
+    ), 0) AS total_out,
+
+    -- 庫存變動 = 進貨 - 出貨
+    (COALESCE((
+      SELECT SUM(quantity) 
+      FROM transactions t1 
+      WHERE t1.transaction_type = 'IN' 
+        AND t1.product_id = p.product_id
+    ), 0) 
+    -
+    COALESCE((
+      SELECT SUM(quantity) 
+      FROM transactions t2 
+      WHERE t2.transaction_type = 'OUT' 
+        AND t2.product_id = p.product_id
+    ), 0)) AS stock_balance,
+
+    -- 最終庫存 = 原始庫存 + 庫存變動
+    (SUM(p.quantity) 
+    +
+    (COALESCE((
+      SELECT SUM(quantity) 
+      FROM transactions t1 
+      WHERE t1.transaction_type = 'IN' 
+        AND t1.product_id = p.product_id
+    ), 0) 
+    -
+    COALESCE((
+      SELECT SUM(quantity) 
+      FROM transactions t2 
+      WHERE t2.transaction_type = 'OUT' 
+        AND t2.product_id = p.product_id
+    ), 0))
+    ) AS recent_quantity
+
+FROM product_suppliers p
+GROUP BY p.product_id;
+
+// 交易紀錄表裡各供應商各產品的總進出貨
+SELECT t.supplier_id,t.product_id,
+SUM(CASE WHEN t.transaction_type = 'IN' THEN quantity ELSE 0 END) AS sum_in,
+SUM(CASE WHEN  t.transaction_type = 'OUT' THEN quantity ELSE 0 END) AS sum_out
+FROM transactions t
+GROUP BY t.product_id,t.supplier_id
+ORDER BY t.supplier_id,t.product_id ASC;
+
+// 最終庫存
+SELECT 
+  p.supplier_id,
+  p.product_id,
+  p.quantity AS initial_quantity,
+  // COALESCE(): 從左到右檢查每個參數，回傳第一個不是 NULL 的值
+  // COALESCE(,0): 將前面的結果為NULL的改成顯示0
+  COALESCE(SUM(CASE WHEN t.transaction_type = 'IN' THEN t.quantity ELSE 0 END), 0) AS sum_in,
+  COALESCE(SUM(CASE WHEN t.transaction_type = 'OUT' THEN t.quantity ELSE 0 END), 0) AS sum_out,
+  p.quantity + 
+    COALESCE(SUM(CASE WHEN t.transaction_type = 'IN' THEN t.quantity ELSE 0 END), 0) -
+    COALESCE(SUM(CASE WHEN t.transaction_type = 'OUT' THEN t.quantity ELSE 0 END), 0) 
+  AS remaining_quantity
+FROM product_suppliers p
+LEFT JOIN transactions t 
+  ON p.product_id = t.product_id 
+  AND p.supplier_id = t.supplier_id
+GROUP BY p.supplier_id, p.product_id
+ORDER BY p.supplier_id, p.product_id;
