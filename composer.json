@@ -1,0 +1,5 @@
+{
+  "name": "grace/factory-inventory-api",
+  "description": "Factory inventory management backend API",
+  "require": {}
+}
