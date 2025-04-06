@@ -25,6 +25,9 @@ header {
   text-align: center;
   font-size: 1.5rem;
 }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+}
 
 main {
   padding: 20px;
