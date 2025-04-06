@@ -119,7 +119,7 @@ onMounted(() => {
 table {
   border-radius: 5px;
   border-collapse: collapse;
-  width: 80%;
+  width: 60%;
   cursor: pointer;
   box-shadow:
     rgba(50, 50, 93, 0.532) 0px 6px 12px -5px,
