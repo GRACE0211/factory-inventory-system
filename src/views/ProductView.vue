@@ -176,4 +176,32 @@ button:active {
   box-shadow: none;
   transform: translateY(0);
 }
+@media screen and (max-width: 800px) {
+  button {
+    appearance: none;
+    background-color: #006bd7;
+    border: 2px;
+    border-radius: 6px;
+    box-sizing: border-box;
+    color: #ffffff;
+    cursor: pointer;
+    /* display: inline-block; */
+    font-size: 12px;
+    font-weight: 400;
+    line-height: normal;
+    margin: 3px;
+    /* min-height: 20px; */
+    min-width: 0;
+    /* outline: none; */
+    padding: 2px 2px;
+    /* text-align: center; */
+    text-decoration: none;
+    transition: all 300ms cubic-bezier(0.23, 1, 0.32, 1);
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    width: 50%;
+    will-change: transform;
+  }
+}
 </style>
