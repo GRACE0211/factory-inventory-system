@@ -3,7 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import ProductView from '../views/ProductView.vue'
 import StockView from '../views/StockView.vue'
-import test from '../views/TestView.vue'
+// import test from '../views/TestView.vue'
 import TransactionView from '../views/TransactionsView.vue'
 import TransactionInsert from '../views/Transaction_insert.vue'
 
@@ -33,11 +33,11 @@ const routes = [
     name: 'TransactionInsert',
     component: TransactionInsert,
   },
-  {
-    path: '/test',
-    name: 'test',
-    component: test,
-  },
+  // {
+  //   path: '/test',
+  //   name: 'test',
+  //   component: test,
+  // },
 ]
 
 const router = createRouter({

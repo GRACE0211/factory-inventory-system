@@ -37,6 +37,10 @@ try {
     $sql = "SELECT * FROM products";
     // query(): 執行SQL, 執行完會得到結果集
     $stmt = $pdo->query($sql);
+
+    // $pdo->query('SQL指令')
+
+
     // 拿出查詢結果
     // [
     //     ["product_id" => 1, "name" => "toothbrush", "price" => 100],

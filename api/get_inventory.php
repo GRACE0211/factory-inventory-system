@@ -5,9 +5,9 @@ header('Content-Type: application/json');
 
 // 資料庫連線資訊
 $host = 'localhost';
-$dbname = 'factory_inventory';  // ✅ 你的資料庫名字
-$username = 'root';             // ✅ 你的 MySQL 帳號
-$password = '';                 // ✅ 你的 MySQL 密碼
+$dbname = 'factory_inventory';  // 資料庫名字
+$username = 'root';             // MySQL 帳號
+$password = '';                 // MySQL 密碼
 
 try {
     // 建立 PDO 連線

@@ -1,8 +1,8 @@
 <template>
-  <Navbar v-if="showNavbar" />
   <!-- 頂部導覽列 -->
-  <router-view />
+  <Navbar v-if="showNavbar" />
   <!-- 主畫面切換 -->
+  <router-view />
 </template>
 
 <script setup lang="ts">

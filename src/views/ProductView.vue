@@ -49,6 +49,7 @@ const products = ref([])
 const editingId = ref(null)
 const editPrice = ref(0)
 
+// 從後端資料庫抓資料
 // 用ref創建的值需要.value存取
 const fetchProducts = async () => {
   try {
@@ -73,7 +74,7 @@ const cancelEdit = () => {
   editPrice.value = 0
 }
 
-// 儲存修改 -> post('php',{要傳回去的值})
+// 儲存修改 -> post('.php',{要傳回去的值})
 const saveEdit = async (productId) => {
   try {
     const response = await axios.post('http://localhost/factory_inventory_api/update_product.php', {
@@ -81,15 +82,19 @@ const saveEdit = async (productId) => {
       price: editPrice.value,
     })
 
+    // 等後端回傳是否更新成功？是: 顯示"更新成功";否: 只要後端沒報成功，無論資料有沒有送出，畫面都會跳出"更新失敗"
     // .find()是在product.value陣列裡面，一筆一筆找出product_id符合的那筆資料
     if (response.data.success) {
       const product = products.value.find((p) => p.product_id === productId)
       product.price = editPrice.value
       cancelEdit()
       alert('更新成功！')
-    } else {
+    }
+    // 前端能連到後端，但後端更新資料庫時失敗
+    else {
       alert('更新失敗！')
     }
+    // 前端連不到後端，或php出現錯誤
   } catch (error) {
     console.error(error)
     alert('發生錯誤！')

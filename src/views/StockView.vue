@@ -81,8 +81,11 @@ const fetchInventory = async () => {
   stocks.value = response.data
 }
 
+// 根據stocks.value, selectedSuppliers.value, selectedProducts.value 自動更新
 const filteredProducts = computed(() => {
+  // .filter() -> 從庫存資料中篩出符合條件的項目
   return stocks.value.filter((item) => {
+    // length === 0 代表沒有勾選 -> 全部顯示
     const supplierMatch =
       selectedSuppliers.value.length === 0 || selectedSuppliers.value.includes(item.supplier_id)
     const productMatch =
@@ -91,11 +94,13 @@ const filteredProducts = computed(() => {
   })
 })
 
+// 根據供應商ID找出對應的供應商名字
 const getSupplierName = (supplierId) => {
   const supplier = suppliers.value.find((s) => s.supplier_id === supplierId)
   return supplier ? supplier.name : '未知供應商'
 }
 
+// 根據產品ID找出對應產品名
 const getProductName = (productId) => {
   const product = products.value.find((p) => p.product_id === productId)
   return product ? product.name : '未知產品'
